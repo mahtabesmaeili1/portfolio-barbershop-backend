@@ -1,8 +1,5 @@
 "use strict";
 
-const { sequelize } = require("../models");
-
-/** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable("appointments", {
@@ -16,19 +13,21 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATEONLY,
       },
-      done: {
+      time: {
         allowNull: false,
+        type: Sequelize.STRING,
+      },
+      done: {
         type: Sequelize.BOOLEAN,
       },
       paid: {
-        allowNull: false,
         type: Sequelize.BOOLEAN,
       },
-      customerId: {
+      userId: {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {
-          model: "customers",
+          model: "users",
           key: "id",
         },
         onUpdate: "CASCADE",
@@ -44,16 +43,7 @@ module.exports = {
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
       },
-      employeeId: {
-        allowNull: false,
-        type: Sequelize.INTEGER,
-        references: {
-          model: "employees",
-          key: "id",
-        },
-        onUpdate: "CASCADE",
-        onDelete: "CASCADE",
-      },
+
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
