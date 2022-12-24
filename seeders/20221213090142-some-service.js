@@ -20,7 +20,7 @@ module.exports = {
           updatedAt: new Date(),
         },
         {
-          name: "Men Haircut & Beard",
+          name: "Haircut & Beard",
           price: 31,
           duration: 45,
           createdAt: new Date(),
@@ -28,7 +28,7 @@ module.exports = {
         },
 
         {
-          name: "Men Hairwash & Haircut & Styling",
+          name: "HairCut & Wash & Styling",
           price: 25,
           duration: 30,
           createdAt: new Date(),
