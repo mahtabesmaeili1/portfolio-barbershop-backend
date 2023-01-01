@@ -5,7 +5,7 @@ const Appointments = require("../models/").appointment;
 const router = new Router();
 const authMiddleware = require("../auth/middleware");
 
-//get all of the artworks
+//get all
 //http :4000/shop/
 router.get("/", async (request, response, next) => {
   try {
@@ -25,6 +25,17 @@ router.get("/appointments", authMiddleware, async (request, response, next) => {
     const appointment = await Appointments.findAll({
       include: [{ model: User }, { model: Service }],
     });
+    response.send(appointment);
+  } catch (e) {
+    console.log(e);
+    next(e);
+  }
+});
+
+//get appointment time
+router.get("/a", async (request, response, next) => {
+  try {
+    const appointment = await Appointments.findAll();
     response.send(appointment);
   } catch (e) {
     console.log(e);
@@ -73,7 +84,7 @@ router.post("/makeappointment", authMiddleware, async (req, res, next) => {
     next();
   }
 });
-//http DELETE :4000/shop/cancelation/6 Authorization:"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQsImlhdCI6MTY3MTg4NTE5MywiZXhwIjoxNjcxODkyMzkzfQ.BLvy8us3Wr_p9HfN1-SRnyKYLLnJ2t8n-fRZ1r10yFw"
+//http DELETE :4000/shop/cancelation/5 Authorization:"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQsImlhdCI6MTY3MTg4NTE5MywiZXhwIjoxNjcxODkyMzkzfQ.BLvy8us3Wr_p9HfN1-SRnyKYLLnJ2t8n-fRZ1r10yFw"
 
 //to remove an appointment
 router.delete("/cancelation/:id", authMiddleware, async (req, res, next) => {
@@ -85,12 +96,6 @@ router.delete("/cancelation/:id", authMiddleware, async (req, res, next) => {
       return res.status(400);
     }
     const appointment = await Appointments.findByPk(id);
-
-    if (appointment.userId !== req.user.id) {
-      return res
-        .status(401)
-        .send("You're not authorized to cancell this appointment");
-    }
 
     await appointment.destroy();
 
