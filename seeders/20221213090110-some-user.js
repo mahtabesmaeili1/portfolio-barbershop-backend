@@ -34,7 +34,7 @@ module.exports = {
         },
         {
           fullName: "Parham Esmaeili",
-          email: "parhamesmaeili@gmail.com",
+          email: "the.mensroom.b11@gmail.com",
           password: bcrypt.hashSync("parham", 10),
           phoneNumber: 12345678,
           isEmployee: true,

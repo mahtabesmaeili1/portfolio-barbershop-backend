@@ -4,7 +4,7 @@ const Service = require("../models/").service;
 const Appointments = require("../models/").appointment;
 const router = new Router();
 const authMiddleware = require("../auth/middleware");
-
+const nodemailer = require("nodemailer");
 //get all
 //http :4000/shop/
 router.get("/", async (request, response, next) => {
@@ -62,12 +62,14 @@ router.put("/appointments/:id", authMiddleware, async (req, res, next) => {
 });
 //http :4000/auth/login email=parhamesmaeili@gmail.com password=parham
 //make appointment
-//http POST :4000/shop/makeappointment Authorization:"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQsImlhdCI6MTY3MTIyNTEyOCwiZXhwIjoxNjcxMjMyMzI4fQ.ovIG8Td_iKcwwbZV42KiPIryNwlp3AoWHKY0Naknvg0" date=2017-09-01 time="12:12" serviceId=3
+//http POST :4000/shop/makeappointment Authorization:"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQsImlhdCI6MTY3Mjc1NjEyMywiZXhwIjoxNjcyNzYzMzIzfQ.N-yO_nmVVz0HDX-as6TsMXC1CJs59UMXgdipj69fAvI" date=2023-01-20 time="12:12" serviceId=3
+
+//
+//
 router.post("/makeappointment", authMiddleware, async (req, res, next) => {
   try {
     // console.log(req, "useeeer");
     const { id } = req.user;
-
     const { date, time, serviceId } = req.body;
     const newAppointment = await Appointments.create({
       date,
@@ -75,15 +77,38 @@ router.post("/makeappointment", authMiddleware, async (req, res, next) => {
       userId: id,
       serviceId,
     });
-    return res.status(201).send({
-      message: " appointment made",
-      newAppointment,
+    const { email } = req.user;
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: { user: "the.mensroom.b11@gmail.com", pass: "htglxrwlkijijbnm" },
     });
+    console.log(transporter);
+    const mailOptions = {
+      from: "the.mensroom.b11@gmail.com",
+      to: email,
+      subject: "Your appointment succesfully confirmed!",
+      text: "Dear sir ,Thank you for your trust to choose us.  Your appointment is confirmed at the Mensroom barbershop!",
+    };
+    console.log(email, "this is users email");
+
+    transporter.sendMail(mailOptions, function (error, info) {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log("Email sent: " + info.response);
+      }
+    });
+
+    return res
+      .status(201)
+      .send({ message: "appointment made", newAppointment });
   } catch (e) {
     console.log(e);
+    res.send(e);
     next();
   }
 });
+
 //http DELETE :4000/shop/cancelation/5 Authorization:"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQsImlhdCI6MTY3MTg4NTE5MywiZXhwIjoxNjcxODkyMzkzfQ.BLvy8us3Wr_p9HfN1-SRnyKYLLnJ2t8n-fRZ1r10yFw"
 
 //to remove an appointment
