@@ -24,6 +24,7 @@ router.get("/appointments", authMiddleware, async (request, response, next) => {
   try {
     const appointment = await Appointments.findAll({
       include: [{ model: User }, { model: Service }],
+      order: [["id", "DESC"]],
     });
     response.send(appointment);
   } catch (e) {
@@ -87,7 +88,7 @@ router.post("/makeappointment", authMiddleware, async (req, res, next) => {
       from: "the.mensroom.b11@gmail.com",
       to: email,
       subject: "Your appointment succesfully confirmed!",
-      text: "Dear sir ,Thank you for your trust to choose us.  Your appointment is confirmed at the Mensroom barbershop!",
+      text: "Dear sir ,Thank you for your trust to choose us.  Your appointment is confirmed at the Mensroom barbershop! kind regards, the mensroom",
     };
     console.log(email, "this is users email");
 
