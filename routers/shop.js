@@ -87,8 +87,8 @@ router.post("/makeappointment", authMiddleware, async (req, res, next) => {
     const mailOptions = {
       from: "the.mensroom.b11@gmail.com",
       to: email,
-      subject: "Your appointment succesfully confirmed!",
-      text: "Dear sir ,Thank you for your trust to choose us.  Your appointment is confirmed at the Mensroom barbershop! kind regards, the mensroom",
+      subject: `Your appointment succesfully confirmed!",
+      text: "Dear sir ,Thank you for your trust to choose us.  Your appointment for ${date} at ${time} for ${serviceId} is confirmed at the Mensroom barbershop! kind regards, the mensroom`,
     };
     console.log(email, "this is users email");
 
